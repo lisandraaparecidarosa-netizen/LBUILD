@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Executivo de Vendas e Resultado — Gráfica Central</title>
+<title>Dashboard Executivo — Análise Fundamentalista AMBEV S.A.</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
 :root{
   --bg:#0d1117; --bg2:#11161d; --card:#161c25; --card2:#1b2330;
   --border:#252e3c; --text:#e8edf2; --muted:#8b97a8;
   --green:#2dd4a0; --green-d:#16826a; --blue:#4fa3ff; --orange:#ff9f4a;
-  --red:#ff5d6c; --graphite:#3a4452;
+  --red:#ff5d6c; --graphite:#3a4452; --gold:#e8b84b;
 }
 *{box-sizing:border-box;}
 body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(circle at top,#121823,var(--bg));color:var(--text);}
 header{padding:28px 32px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;}
 header h1{margin:0;font-size:24px;font-weight:700;letter-spacing:.3px;}
-header h1 span{color:var(--green);}
+header h1 span{color:var(--gold);}
 header p{margin:4px 0 0;color:var(--muted);font-size:13px;}
-.note{background:#241c12;border:1px solid #4a3a1c;color:#ffcf8a;font-size:12px;padding:8px 14px;border-radius:8px;max-width:340px;}
-.container{max-width:1280px;margin:0 auto;padding:28px 32px 60px;}
+.note{background:#241c12;border:1px solid #4a3a1c;color:#ffcf8a;font-size:12px;padding:8px 14px;border-radius:8px;max-width:380px;}
+.container{max-width:1320px;margin:0 auto;padding:28px 32px 60px;}
 
 /* TABS */
 .tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
 .tab-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:999px;font-size:13px;cursor:pointer;transition:.2s;}
-.tab-btn:hover{color:var(--text);border-color:var(--green);}
-.tab-btn.active{background:linear-gradient(135deg,var(--green),var(--green-d));color:#06231c;font-weight:700;border-color:transparent;}
+.tab-btn:hover{color:var(--text);border-color:var(--gold);}
+.tab-btn.active{background:linear-gradient(135deg,var(--gold),#b5861f);color:#221b06;font-weight:700;border-color:transparent;}
 .view{display:none;}
 .view.active{display:block;animation:fade .35s ease;}
 @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
@@ -33,185 +33,219 @@ header p{margin:4px 0 0;color:var(--muted);font-size:13px;}
 /* KPI */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:28px;}
 .kpi{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;}
-.kpi::after{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;background:radial-gradient(circle,rgba(45,212,160,.12),transparent);}
+.kpi::after{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;background:radial-gradient(circle,rgba(232,184,75,.12),transparent);}
 .kpi .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
-.kpi .value{font-size:23px;font-weight:700;margin-top:6px;}
+.kpi .value{font-size:22px;font-weight:700;margin-top:6px;}
 .kpi .delta{font-size:12px;margin-top:6px;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;}
 .kpi .delta.up{background:rgba(45,212,160,.12);color:var(--green);}
 .kpi .delta.down{background:rgba(255,93,108,.12);color:var(--red);}
-.kpi.alert .value{color:var(--red);}
+.kpi .delta.flat{background:rgba(139,151,168,.12);color:var(--muted);}
+.kpi.alert .value{color:var(--orange);}
 
 /* SECTION CARD */
 .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-bottom:18px;}
+.grid2b{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px;}
-@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr;}}
+@media(max-width:900px){.grid2,.grid3,.grid2b{grid-template-columns:1fr;}}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 4px 18px rgba(0,0,0,.25);}
 .card h3{margin:0 0 2px;font-size:15px;}
 .card .desc{color:var(--muted);font-size:12px;margin-bottom:14px;}
-.insight{margin-top:14px;background:#0f2a23;border:1px solid #1d4a3c;color:#9beac9;font-size:12px;border-radius:10px;padding:10px 12px;}
+.insight{margin-top:14px;background:#0f2a23;border:1px solid #1d4a3c;color:#9beac9;font-size:12px;border-radius:10px;padding:10px 12px;line-height:1.5;}
 .insight.warn{background:#2a1414;border-color:#4a1d1d;color:#ffb1ab;}
+.insight.info{background:#152233;border-color:#264566;color:#a9cdf5;}
 canvas{max-height:300px;}
 
 /* TABLE */
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);}
-th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.4px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th,td{padding:8px 9px;text-align:left;border-bottom:1px solid var(--border);}
+th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;}
 td.num{text-align:right;font-variant-numeric:tabular-nums;}
-tr.total td{font-weight:700;border-top:2px solid var(--green-d);color:var(--green);}
-tr.clickable{cursor:pointer;transition:.15s;}
-tr.clickable:hover{background:rgba(255,255,255,.03);}
-.badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;}
-.badge.fixo{background:rgba(79,163,255,.15);color:var(--blue);}
-.badge.var{background:rgba(255,159,74,.15);color:var(--orange);}
-.badge.div{background:rgba(255,93,108,.15);color:var(--red);}
-.badge.soc{background:rgba(58,68,82,.4);color:#aab4c2;}
+tr.subtotal td{font-weight:700;border-top:1px solid var(--graphite);color:var(--gold);}
+tr.total td{font-weight:700;border-top:2px solid var(--gold);color:var(--gold);background:rgba(232,184,75,.05);}
+tr.section td{color:var(--blue);font-weight:700;padding-top:14px;}
+.tbl-wrap{max-height:520px;overflow-y:auto;}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:600;margin-left:6px;}
+.badge.recalc{background:rgba(255,159,74,.15);color:var(--orange);}
 
 /* ACTIONS */
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 @media(max-width:900px){.actions{grid-template-columns:1fr;}}
 .action{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:18px;}
-.action .n{width:28px;height:28px;border-radius:50%;background:var(--green);color:#06231c;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-bottom:10px;}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:24px;border-top:1px solid var(--border);}
-.filter-tag{display:inline-flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--green-d);color:var(--green);padding:4px 12px;border-radius:999px;font-size:12px;margin-bottom:16px;cursor:pointer;}
+.action .n{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#221b06;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-bottom:10px;}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:24px;border-top:1px solid var(--border);line-height:1.7;}
+.src-note{font-size:11px;color:var(--muted);margin-top:8px;}
 </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>Dashboard Executivo <span>Gráfica Central</span></h1>
-    <p>Fechamento financeiro — Maio 2026 · Pouso Redondo/SC · Fonte: relatórios LBuild Finanças (DRE + Estrutura de Custos)</p>
+    <h1>Dashboard Executivo <span>AMBEV S.A. — Análise Fundamentalista</span></h1>
+    <p>Demonstrações Financeiras Consolidadas · Exercícios findos em 31/12/2024 e 31/12/2023 · Valores em R$ mil, salvo indicação em contrário</p>
   </div>
-  <div class="note">⚠️ Dataset enviado é de fechamento financeiro mensal único (não há base transacional de vendas multi-loja/produto). Dashboard adaptado para a granularidade real disponível: DRE, custos, clientes e caixa de maio/2026.</div>
+  <div class="note">⚠️ 4 indicadores (Liquidez Geral, Prazo Médio de Vendas, Renovação de Estoques e Participação de Capitais de Terceiros) constavam zerados/incompletos para 2024 na planilha original. Foram recalculados pela equipe FLOW 360 a partir do Balanço, com a mesma fórmula usada em 2023 — sinalizados com <span class="badge recalc">recalculado</span> na aba Indicadores.</div>
 </header>
 
 <div class="container">
 
   <div class="tabs">
     <button class="tab-btn active" data-tab="visao">Visão Geral</button>
-    <button class="tab-btn" data-tab="custos">Estrutura de Custos</button>
-    <button class="tab-btn" data-tab="clientes">Receita por Cliente</button>
-    <button class="tab-btn" data-tab="caixa">Fluxo de Caixa</button>
+    <button class="tab-btn" data-tab="balanco">Balanço Patrimonial</button>
+    <button class="tab-btn" data-tab="dre">DRE</button>
+    <button class="tab-btn" data-tab="indicadores">Indicadores &amp; Solvência</button>
   </div>
 
   <div class="kpi-grid">
-    <div class="kpi"><div class="label">Faturamento Bruto</div><div class="value">R$ 54.489,59</div><div class="delta up">▲ base do período</div></div>
-    <div class="kpi"><div class="label">Margem Bruta</div><div class="value">72,9%</div><div class="delta up">▲ CMV 27,1%</div></div>
-    <div class="kpi"><div class="label">Resultado Operacional</div><div class="value">R$ 21.150,95</div><div class="delta up">38,8% do fat.</div></div>
-    <div class="kpi alert"><div class="label">Resultado do Exercício</div><div class="value">(R$ 8.224,59)</div><div class="delta down">▼ -15,1% do fat.</div></div>
-    <div class="kpi alert"><div class="label">Caixa Final</div><div class="value">(R$ 92,99)</div><div class="delta down">▼ liquidez crítica</div></div>
-    <div class="kpi"><div class="label">Total de Custos / Fat.</div><div class="value">122,0%</div><div class="delta down">▼ custos &gt; receita</div></div>
+    <div class="kpi"><div class="label">Receita Líquida (ROL)</div><div class="value">R$ 89,45 bi</div><div class="delta up">▲ +12,2% vs 2023</div></div>
+    <div class="kpi"><div class="label">Lucro Bruto</div><div class="value">R$ 45,84 bi</div><div class="delta up">Margem 51,2% (+0,5 p.p.)</div></div>
+    <div class="kpi"><div class="label">EBIT (Lucro Operacional)</div><div class="value">R$ 21,80 bi</div><div class="delta up">Margem 24,4% (+0,8 p.p.)</div></div>
+    <div class="kpi alert"><div class="label">Lucro Líquido</div><div class="value">R$ 14,85 bi</div><div class="delta down">▼ -0,8% · margem 16,6% (-2,2 p.p.)</div></div>
+    <div class="kpi"><div class="label">ROE</div><div class="value">14,9%</div><div class="delta down">▼ vs 18,7% em 2023</div></div>
+    <div class="kpi"><div class="label">Liquidez Corrente</div><div class="value">1,10</div><div class="delta up">▲ vs 0,89 em 2023</div></div>
+    <div class="kpi"><div class="label">Endividamento Geral</div><div class="value">38,7%</div><div class="delta up">▼ vs 39,6% em 2023</div></div>
+    <div class="kpi"><div class="label">Caixa Líquido (Caixa - Dívida)</div><div class="value">R$ 26,57 bi</div><div class="delta up">▲ +103% vs 2023</div></div>
   </div>
 
   <!-- VISÃO GERAL -->
   <div class="view active" id="visao">
     <div class="grid2">
       <div class="card">
-        <h3>DRE — Cascata do Resultado</h3>
-        <div class="desc">Da receita bruta ao resultado do exercício (R$)</div>
+        <h3>DRE — Ponte da Receita Líquida ao Lucro Líquido (2024)</h3>
+        <div class="desc">R$ bilhões</div>
         <canvas id="chartDRE"></canvas>
-        <div class="insight">Resultado operacional positivo (R$ 21.151 / 38,8%) é consumido pelo serviço da dívida — o negócio é saudável, o passivo financeiro é o problema.</div>
+        <div class="insight">EBIT cresceu +15,6% e o LAIR +29,6% — a operação melhorou de fato. O lucro líquido praticamente estagnou (-0,8%) porque o IR/CSLL saltou de R$ 75,5 milhões (2023, alíquota efetiva de 0,5%) para R$ 4,64 bi (2024, alíquota efetiva de 23,8%). O gargalo de 2024 é tributário, não operacional.</div>
       </div>
       <div class="card">
-        <h3>Composição do Faturamento</h3>
-        <div class="desc">Para onde vai cada R$ 1,00 vendido</div>
-        <canvas id="chartComposicao"></canvas>
+        <h3>Receita, EBIT e Lucro Líquido — 2023 x 2024</h3>
+        <div class="desc">R$ bilhões</div>
+        <canvas id="chartEvolucao"></canvas>
+      </div>
+    </div>
+    <div class="grid2b">
+      <div class="card">
+        <h3>Composição do Ativo Total</h3>
+        <div class="desc">R$ 162,51 bi em 31/12/2024</div>
+        <canvas id="chartAtivoComp"></canvas>
+      </div>
+      <div class="card">
+        <h3>Estrutura de Capital — Próprio x Terceiros</h3>
+        <div class="desc">Como o Ativo Total é financiado</div>
+        <canvas id="chartCapital"></canvas>
+        <div class="insight">Patrimônio Líquido financia 61,3% do Ativo (vs 60,4% em 2023) — estrutura de capital conservadora e em leve desalavancagem, mesmo com o Ativo Total crescendo 22,5%.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BALANÇO -->
+  <div class="view" id="balanco">
+    <div class="grid2">
+      <div class="card">
+        <h3>Ativo — Circulante x Não Circulante</h3>
+        <div class="desc">Distribuição do Ativo Total · 2024</div>
+        <canvas id="chartAtivoDetalhe"></canvas>
+      </div>
+      <div class="card">
+        <h3>Passivo + Patrimônio Líquido</h3>
+        <div class="desc">Distribuição das fontes de financiamento · 2024</div>
+        <canvas id="chartPassivoComp"></canvas>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Balanço Patrimonial — ATIVO</h3>
+        <div class="desc">2024 x 2023 · AV% (participação no Ativo Total) · AH% (variação)</div>
+        <div class="tbl-wrap"><table id="tblAtivo"><thead><tr><th>Descrição da Conta</th><th class="num">2024</th><th class="num">AV%</th><th class="num">2023</th><th class="num">AV%</th><th class="num">AH%</th></tr></thead><tbody></tbody></table></div>
+        <div class="src-note">Valores em R$ mil</div>
+      </div>
+      <div class="card">
+        <h3>Balanço Patrimonial — PASSIVO</h3>
+        <div class="desc">2024 x 2023 · AV% (participação no Passivo+PL) · AH% (variação)</div>
+        <div class="tbl-wrap"><table id="tblPassivo"><thead><tr><th>Descrição da Conta</th><th class="num">2024</th><th class="num">AV%</th><th class="num">2023</th><th class="num">AV%</th><th class="num">AH%</th></tr></thead><tbody></tbody></table></div>
+        <div class="src-note">Valores em R$ mil</div>
       </div>
     </div>
     <div class="card">
-      <h3>Despesas por Categoria — Maio 2026</h3>
-      <div class="desc">Ranking das maiores saídas financeiras (clique numa barra para detalhar)</div>
-      <canvas id="chartDespesasRank" style="max-height:260px;"></canvas>
+      <h3>Leitura do Balanço</h3>
+      <div class="insight">Caixa e equivalentes saltaram de R$ 16,06 bi para R$ 28,60 bi (+78,1%) — a companhia mais do que dobrou sua posição de caixa líquido (dívida bruta menos caixa e aplicações), de R$ 13,08 bi para R$ 26,57 bi. É uma posição financeira robusta, com folga relevante para investimentos, distribuição de dividendos ou aquisições.</div>
+      <div class="insight warn">Estoques cresceram 21,5% (R$ 9,62 bi → R$ 11,69 bi), ritmo acima do CPV (+11,0%). Isso elevou o prazo de renovação de estoques de 88,1 para 96,5 dias — vale investigar se é acúmulo estratégico (hedge de custos/matéria-prima) ou perda de giro operacional.</div>
     </div>
   </div>
 
-  <!-- CUSTOS -->
-  <div class="view" id="custos">
+  <!-- DRE -->
+  <div class="view" id="dre">
     <div class="grid2">
       <div class="card">
-        <h3>Estrutura de Custos — Fixo x Variável x Dívida x Sócios</h3>
-        <div class="desc">% do faturamento de maio/2026 · clique para filtrar a tabela</div>
-        <canvas id="chartCustoDonut"></canvas>
-        <div class="insight warn">Serviço da dívida (45,4%) é a maior fatia da estrutura de custos — maior até que custo variável (42,3%) e custo fixo (28,7%) somados isoladamente.</div>
+        <h3>Evolução das Margens</h3>
+        <div class="desc">Margem Bruta, EBIT e Líquida — 2023 x 2024 (% da ROL)</div>
+        <canvas id="chartMargens"></canvas>
       </div>
       <div class="card">
-        <h3 id="tblCustoTitulo">Detalhamento — Todas as Categorias</h3>
-        <div class="desc">Clique no gráfico ao lado para filtrar por categoria</div>
-        <span class="filter-tag" id="clearFilterCusto" style="display:none;" onclick="clearCustoFilter()">✕ Limpar filtro</span>
-        <table id="tblCusto"><thead><tr><th>Descrição</th><th>Categoria</th><th class="num">Valor</th><th class="num">% Fat.</th></tr></thead><tbody></tbody></table>
+        <h3>Alíquota Efetiva de Imposto de Renda + CSLL</h3>
+        <div class="desc">IR/CSLL ÷ Lucro Antes dos Impostos (LAIR)</div>
+        <canvas id="chartAliquota"></canvas>
+        <div class="insight warn">A alíquota efetiva de 2023 (0,5%) foi atipicamente baixa — não é o padrão recorrente da companhia. 2024 (23,8%) está mais próxima do nominal (34%) e deve ser a referência para projeções futuras, não 2023.</div>
       </div>
+    </div>
+    <div class="card">
+      <h3>Demonstração do Resultado do Exercício — Consolidado</h3>
+      <div class="desc">2024 x 2023 · AV% (participação na ROL) · AH% (variação)</div>
+      <div class="tbl-wrap"><table id="tblDRE"><thead><tr><th>Descrição da Conta</th><th class="num">2024</th><th class="num">AV%</th><th class="num">2023</th><th class="num">AV%</th><th class="num">AH%</th></tr></thead><tbody></tbody></table></div>
+      <div class="src-note">Valores em R$ mil</div>
     </div>
   </div>
 
-  <!-- CLIENTES -->
-  <div class="view" id="clientes">
+  <!-- INDICADORES -->
+  <div class="view" id="indicadores">
     <div class="grid2">
       <div class="card">
-        <h3>Distribuição da Receita por Cliente</h3>
-        <div class="desc">Participação % no faturamento total de maio/2026</div>
-        <canvas id="chartClientes"></canvas>
-        <div class="insight">43,7% da receita vem de carteira pulverizada (50+ clientes) — boa diversificação, sem dependência crítica de um único cliente. Antecipação/cobrança bancária representa 34,6% — atenção ao custo financeiro embutido nessa operação.</div>
+        <h3>Índices de Liquidez</h3>
+        <div class="desc">2023 x 2024</div>
+        <canvas id="chartLiquidez"></canvas>
+        <div class="insight">Capital Circulante Líquido virou de negativo (-R$ 4,44 bi em 2023) para positivo (+R$ 4,77 bi em 2024) — a empresa deixou de depender de recursos de longo prazo/caixa para bancar o giro e passou a ter folga própria no curto prazo.</div>
       </div>
       <div class="card">
-        <h3>Ranking de Clientes</h3>
-        <div class="desc">Maiores contribuintes de receita</div>
-        <table><thead><tr><th>Cliente</th><th class="num">Valor (R$)</th><th class="num">%</th></tr></thead>
-        <tbody>
-          <tr><td>Antecip./Cobr. Bancária</td><td class="num">18.862,95</td><td class="num">34,6%</td></tr>
-          <tr><td>Outros (50+ clientes)</td><td class="num">23.815,60</td><td class="num">43,7%</td></tr>
-          <tr><td>Coop. de Crédito</td><td class="num">3.600,00</td><td class="num">6,6%</td></tr>
-          <tr><td>Pref. Pouso Redondo</td><td class="num">3.031,04</td><td class="num">5,6%</td></tr>
-          <tr><td>Royal Autocompany</td><td class="num">3.000,00</td><td class="num">5,5%</td></tr>
-          <tr><td>Inova + F.C. Gráficos</td><td class="num">2.180,00</td><td class="num">4,0%</td></tr>
-          <tr class="total"><td>Total</td><td class="num">54.489,59</td><td class="num">100,0%</td></tr>
-        </tbody></table>
+        <h3>Posição de Caixa Líquido</h3>
+        <div class="desc">Dívida Bruta x Caixa e Aplicações Financeiras (R$ bi)</div>
+        <canvas id="chartCaixaLiquido"></canvas>
       </div>
     </div>
-  </div>
-
-  <!-- CAIXA -->
-  <div class="view" id="caixa">
-    <div class="grid2">
-      <div class="card">
-        <h3>Fluxo de Caixa — Maio 2026</h3>
-        <div class="desc">Entradas x Saídas x Resultado (R$)</div>
-        <canvas id="chartCaixa"></canvas>
-      </div>
-      <div class="card">
-        <h3>Indicadores de Liquidez</h3>
-        <div class="desc">Leitura de risco operacional</div>
-        <table>
-          <tr><td>Entradas operacionais</td><td class="num">R$ 54.489,59</td></tr>
-          <tr><td>Saídas totais</td><td class="num">R$ 63.315,00</td></tr>
-          <tr><td>Resultado de caixa do mês</td><td class="num" style="color:var(--red)">(R$ 8.825,41)</td></tr>
-          <tr class="total"><td>Saldo final de caixa</td><td class="num">(R$ 92,99)</td></tr>
-        </table>
-        <div class="insight warn">Caixa zerado: sem reserva para inadimplência, quebra de equipamento ou sazonalidade. Qualquer atraso de recebível gera risco de descasamento de pagamentos.</div>
-      </div>
+    <div class="card">
+      <h3>Painel de Indicadores Fundamentalistas</h3>
+      <div class="desc">Fórmulas, valores 2024/2023 e leitura de risco</div>
+      <div class="tbl-wrap"><table id="tblIndic"><thead><tr><th>Indicador</th><th>Fórmula</th><th class="num">2024</th><th class="num">2023</th><th>Leitura</th></tr></thead><tbody></tbody></table></div>
+      <div class="src-note">Indicadores marcados <span class="badge recalc">recalculado</span> estavam zerados/incompletos para 2024 na planilha original e foram recompostos pela equipe FLOW 360 com a mesma metodologia aplicada a 2023, a partir das contas do Balanço Patrimonial de 31/12/2024.</div>
     </div>
-  </div>
 
-  <div class="card" style="margin-top:6px;">
-    <h3>Plano de Ação Recomendado</h3>
-    <div class="desc">Prioridades para junho/2026</div>
-    <div class="actions">
-      <div class="action"><div class="n">1</div><strong>Renegociar Dívida</strong><p style="color:var(--muted);font-size:13px;">R$ 24,7K–26,3K/mês em parcelas. Meta: reduzir para abaixo de R$ 15K/mês, liberando ~R$ 10-11K de caixa operacional.</p></div>
-      <div class="action"><div class="n">2</div><strong>Ampliar Faturamento</strong><p style="color:var(--muted);font-size:13px;">Cada R$ 10K adicional gera ~R$ 7,3K de margem bruta. Meta: R$ 70K em junho via prefeituras/associações.</p></div>
-      <div class="action"><div class="n">3</div><strong>Reserva de Emergência</strong><p style="color:var(--muted);font-size:13px;">Caixa zerado é risco crítico. Suspender retiradas de sócios até constituir reserva mínima de R$ 5K.</p></div>
+    <div class="card" style="margin-top:6px;">
+      <h3>Leitura Estratégica para o Investidor</h3>
+      <div class="desc">Síntese fundamentalista — exercício 2024</div>
+      <div class="actions">
+        <div class="action"><div class="n">1</div><strong>Operação saudável, tributo é a variável do ano</strong><p style="color:var(--muted);font-size:13px;">Receita, margem bruta e EBIT melhoraram. O lucro líquido estagnou por normalização da alíquota efetiva de IR/CSLL (0,5% → 23,8%), não por perda operacional. Modele 2025 com alíquota efetiva próxima de 24-30%, não repita a base de 2023.</p></div>
+        <div class="action"><div class="n">2</div><strong>Caixa líquido positivo e crescente</strong><p style="color:var(--muted);font-size:13px;">Caixa líquido de R$ 26,57 bi (dívida bruta de apenas R$ 3,45 bi) dá musculatura para M&amp;A, buybacks ou aumento de dividendos sem pressionar o balanço. Monitorar a política de alocação desse excedente.</p></div>
+        <div class="action"><div class="n">3</div><strong>Giro de estoque merece acompanhamento</strong><p style="color:var(--muted);font-size:13px;">Renovação de estoques subiu de 88 para ~96 dias. Recomenda-se abrir a composição por categoria de produto no próximo ciclo para confirmar se é decisão estratégica de compras ou sinal de desaceleração de giro.</p></div>
+      </div>
     </div>
   </div>
 
 </div>
 
-<footer>LBuild Finanças × FLOW 360 — Dashboard gerado a partir dos relatórios de fechamento financeiro de maio/2026. ⚠️ Nota técnica: há divergência entre as duas fontes na rubrica "Empréstimos" (R$ 14.839,74 no DRE vs. R$ 13.268,74 na Relação de Custos) — recomenda-se reconciliação contábil antes de decisões formais.</footer>
+<footer>
+  Dashboard elaborado por Lisandra Rosa · FLOW 360 — a partir das Demonstrações Financeiras Padronizadas (DFP) consolidadas da AMBEV S.A., exercícios findos em 31/12/2024 e 31/12/2023 (arquivo-fonte: "Grupo 01 Ambev 31 12 2024 Análise fundamentalista.xlsx").<br>
+  Uso externo/informativo. Não constitui recomendação de investimento. Para decisões de alocação, valide as DFPs oficiais na CVM/B3 e consulte um profissional certificado (CNPI/CFA).
+</footer>
 
 <script>
 Chart.defaults.color = '#8b97a8';
 Chart.defaults.borderColor = '#252e3c';
 Chart.defaults.font.family = "'Segoe UI', sans-serif";
 
-const fmt = v => 'R$ ' + v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtPct = v => v.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + '%';
+// ---------- FORMATTERS ----------
+// Valores brutos sempre em R$ mil (unidade original da planilha)
+const fmtNum = v => { const a = Math.round(Math.abs(v)).toLocaleString('pt-BR'); return v<0 ? '('+a+')' : a; };
+const fmtBi = v => { const a = Math.abs(v/1e6).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); return (v<0?'(R$ '+a+' bi)':'R$ '+a+' bi'); };
+const fmtPct = v => (v===null||v===undefined||isNaN(v)) ? '—' : v.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + '%';
+const fmtRatio = v => v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtDias = v => v.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' dias';
 
 // TABS
 document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -223,128 +257,251 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
   });
 });
 
-// DRE Waterfall (stacked bar simulating waterfall)
+// ================= DRE — dados brutos (R$ mil) =================
+// [label, v2024, v2023, tipo]  tipo: normal | subtotal | total
+const dreRows = [
+  ['Receita de Venda de Bens e/ou Serviços (Receita Bruta)', 134130924, 120117628, 'normal'],
+  ['(-) Deduções da Receita Bruta', -44678255, -40380772, 'normal'],
+  ['   Tributos sobre Vendas', -27417943, -25227478, 'normal'],
+  ['   Descontos', -17260312, -15153294, 'normal'],
+  ['Receita Operacional Líquida (ROL)', 89452669, 79736856, 'subtotal'],
+  ['(-) Custo dos Produtos Vendidos (CPV)', -43615080, -39291571, 'normal'],
+  ['Lucro Bruto', 45837589, 40445285, 'subtotal'],
+  ['(-) Despesas de Logística', -11557161, -10750586, 'normal'],
+  ['(-) Despesas Comerciais', -8634163, -7412463, 'normal'],
+  ['(-) Despesas Administrativas', -6201074, -5273670, 'normal'],
+  ['(+) Outras Receitas Operacionais', 2457262, 2028888, 'normal'],
+  ['(-) Itens Não Usuais', -100795, -206356, 'normal'],
+  ['Lucro Operacional (EBIT)', 21801658, 18831098, 'subtotal'],
+  ['(-) Despesas Financeiras', -4510782, -6280052, 'normal'],
+  ['(+) Receitas Financeiras', 2605338, 2670300, 'normal'],
+  ['(-) Outros Resultados Financeiros Líquidos', -408887, -185406, 'normal'],
+  ['Lucro Antes dos Impostos sobre o Lucro (LAIR)', 19487327, 15035940, 'subtotal'],
+  ['(-) Imposto de Renda e Contribuição Social', -4640375, -75481, 'normal'],
+  ['Lucro Líquido do Exercício (Consolidado)', 14846952, 14960459, 'total'],
+];
+
+function renderFinTable(tbodySel, rows, base24, base23){
+  const tbody = document.querySelector(tbodySel);
+  tbody.innerHTML = rows.map(r=>{
+    const [label, v24, v23, tipo] = r;
+    const av24 = base24 ? (v24/base24*100) : null;
+    const av23 = base23 ? (v23/base23*100) : null;
+    const ah = (v23!==0) ? ((v24/v23-1)*100) : null;
+    const cls = tipo==='total' ? 'total' : (tipo==='subtotal' ? 'subtotal' : '');
+    return `<tr class="${cls}"><td>${label}</td><td class="num">${fmtNum(v24)}</td><td class="num">${fmtPct(av24)}</td><td class="num">${fmtNum(v23)}</td><td class="num">${fmtPct(av23)}</td><td class="num">${fmtPct(ah)}</td></tr>`;
+  }).join('');
+}
+renderFinTable('#tblDRE tbody', dreRows, 89452669, 79736856);
+
+// ================= BALANÇO — ATIVO =================
+const ativoRows = [
+  ['Ativo Circulante', 54155784, 36563050, 'subtotal'],
+  ['   Caixa e Equivalentes de Caixa', 28595666, 16059003, 'normal'],
+  ['   Aplicações Financeiras', 1242001, 277164, 'normal'],
+  ['   Clientes / Contas a Receber', 6269863, 5741457, 'normal'],
+  ['   Instrumentos Financeiros Derivativos', 1218561, 378049, 'normal'],
+  ['   Estoques', 11689767, 9619022, 'normal'],
+  ['   Tributos a Recuperar', 3582275, 3435688, 'normal'],
+  ['   Outros Ativos Circulantes', 1557651, 1052667, 'normal'],
+  ['Ativo Não Circulante', 108352165, 96081083, 'subtotal'],
+  ['   Realizável a Longo Prazo', 20913198, 21116491, 'normal'],
+  ['   Investimentos', 395393, 289063, 'normal'],
+  ['   Imobilizado', 30170194, 26630156, 'normal'],
+  ['   Intangível', 12530712, 10041733, 'normal'],
+  ['   Ágio', 44342668, 38003640, 'normal'],
+  ['TOTAL DO ATIVO', 162507949, 132644133, 'total'],
+];
+renderFinTable('#tblAtivo tbody', ativoRows, 162507949, 132644133);
+
+// ================= BALANÇO — PASSIVO =================
+const passivoRows = [
+  ['Passivo Circulante', 49388714, 41004897, 'subtotal'],
+  ['   Contas a Pagar', 25223522, 23195101, 'normal'],
+  ['   Instrumentos Financeiros Derivativos', 204721, 751362, 'normal'],
+  ['   Empréstimos e Financiamentos', 1276391, 1298091, 'normal'],
+  ['   Salários e Encargos', 2779753, 2128547, 'normal'],
+  ['   Dividendos e Juros sobre Cap. Próprio', 8487242, 1526151, 'normal'],
+  ['   IR e CSL a Pagar', 1941540, 1340492, 'normal'],
+  ['   Impostos, Taxas e Contribuições', 5648399, 6236626, 'normal'],
+  ['   Participação em Controlada e Outros Passivos', 3386235, 4110138, 'normal'],
+  ['   Provisões', 440911, 418389, 'normal'],
+  ['Passivo Não Circulante', 13538721, 11495434, 'subtotal'],
+  ['   Contas a Pagar', 327706, 307300, 'normal'],
+  ['   Instrumentos Financeiros Derivativos', 6720, 11643, 'normal'],
+  ['   Empréstimos e Financiamentos', 2176337, 2202975, 'normal'],
+  ['   IR e CSL Diferidos', 5007711, 3318448, 'normal'],
+  ['   IR e CSL a Recolher', 1372387, 1487125, 'normal'],
+  ['   Impostos, Taxas e Contrib. a Recolher', 597449, 513315, 'normal'],
+  ['   Opção de Venda Concedida', 1142775, 1083221, 'normal'],
+  ['   Provisões', 670904, 559614, 'normal'],
+  ['   Benefícios a Funcionários', 2236732, 2011793, 'normal'],
+  ['Total do Passivo (Capitais de Terceiros)', 62927435, 52500331, 'subtotal'],
+  ['Patrimônio Líquido (Capital Próprio)', 99580514, 80143802, 'subtotal'],
+  ['   Capital Social Realizado', 58226036, 58177929, 'normal'],
+  ['   Reservas', 108973429, 98669404, 'normal'],
+  ['   Ajuste de Avaliação Patrimonial', -68557326, -77878043, 'normal'],
+  ['   Participação de Não Controladores', 938375, 1174512, 'normal'],
+  ['TOTAL DO PASSIVO + PATRIMÔNIO LÍQUIDO', 162507949, 132644133, 'total'],
+];
+renderFinTable('#tblPassivo tbody', passivoRows, 162507949, 132644133);
+
+// ================= INDICADORES =================
+// AC, PC, RLP, PNC, PL, Estoques, Clientes, CPV, ReceitaBruta, LucroLiquido, ROL (2024/2023) para cálculo
+const AC24=54155784, PC24=49388714, RLP24=20913198, PNC24=13538721, PL24=99580514,
+      Est24=11689767, Cli24=6269863, CPV24=43615080, RB24=134130924, LL24=14846952, ROL24=89452669, ATV24=162507949;
+const AC23=36563050, PC23=41004897, RLP23=21116491, PNC23=11495434, PL23=80143802,
+      Est23=9619022, Cli23=5741457, CPV23=39291571, RB23=120117628, LL23=14960459, ROL23=79736856;
+
+const liqCorrente24 = AC24/PC24, liqCorrente23 = AC23/PC23;
+const liqSeca24 = (AC24-Est24)/PC24, liqSeca23 = (AC23-Est23)/PC23;
+const liqGeral24 = (AC24+RLP24)/(PC24+PNC24), liqGeral23 = (AC23+RLP23)/(PC23+PNC23);
+const ccl24 = AC24-PC24, ccl23 = AC23-PC23;
+const prazoVendas24 = (Cli24/RB24)*360, prazoVendas23 = (Cli23/RB23)*360;
+const renovEstoque24 = (Est24/CPV24)*360, renovEstoque23 = (Est23/CPV23)*360;
+const endivGeral24 = (PC24+PNC24)/ATV24*100, endivGeral23 = (PC23+PNC23)/(PC23+PNC23+PL23)*100;
+const partTerceiros24 = (PC24+PNC24)/PL24*100, partTerceiros23 = (PC23+PNC23)/PL23*100;
+const roe24 = LL24/PL24*100, roe23 = LL23/PL23*100;
+const margemLiq24 = LL24/ROL24*100, margemLiq23 = LL23/ROL23*100;
+
+const indicRows = [
+  ['Liquidez Corrente', 'Ativo Circulante ÷ Passivo Circulante', fmtRatio(liqCorrente24), fmtRatio(liqCorrente23), 'Para cada R$1 de dívida de curto prazo, a empresa tem R$1,10 em ativos de curto prazo (2024) — folga positiva, revertendo o quadro apertado de 2023.', false],
+  ['Liquidez Seca', '(Ativo Circulante - Estoques) ÷ Passivo Circulante', fmtRatio(liqSeca24), fmtRatio(liqSeca23), 'Mesmo excluindo estoques, a cobertura de curto prazo melhorou de 0,66 para 0,86 — ainda abaixo de 1,0, mas em trajetória de recuperação.', false],
+  ['Liquidez Geral', '(Ativo Circ. + Realiz. LP) ÷ (Passivo Circ. + Não Circ.)', fmtRatio(liqGeral24), fmtRatio(liqGeral23), 'Cobertura de 1,19x das dívidas totais por ativos realizáveis — posição confortável no longo prazo.', true],
+  ['Capital Circulante Líquido (CCL)', 'Ativo Circulante - Passivo Circulante', fmtBi(ccl24), fmtBi(ccl23), 'CCL virou positivo (R$ 4,77 bi) após ser negativo em 2023 (-R$ 4,44 bi) — sinal claro de fortalecimento do capital de giro.', false],
+  ['Prazo Médio de Vendas (Recebimento)', '(Clientes ÷ Receita Bruta) × 360', fmtDias(prazoVendas24), fmtDias(prazoVendas23), 'Recebimento levemente mais rápido (16,8 vs 17,2 dias) — eficiência de cobrança estável/melhorando.', true],
+  ['Renovação de Estoques', '(Estoques ÷ CPV) × 360', fmtDias(renovEstoque24)+' ('+fmtRatio(360/renovEstoque24)+' giros/ano)', fmtDias(renovEstoque23)+' ('+fmtRatio(360/renovEstoque23)+' giros/ano)', 'Giro caiu de 4,09 para 3,73 vezes ao ano — estoque crescendo mais rápido que o custo das vendas, ponto de atenção operacional.', true],
+  ['Endividamento Geral', '(Passivo Circ. + Não Circ.) ÷ Ativo Total', fmtPct(endivGeral24), fmtPct(endivGeral23), '38,7% do Ativo é financiado por terceiros (vs 39,6% em 2023) — endividamento moderado e em leve queda.', false],
+  ['Participação de Capitais de Terceiros', '(Passivo Circ. + Não Circ.) ÷ Patrimônio Líquido', fmtPct(partTerceiros24), fmtPct(partTerceiros23), 'Para cada R$1 de capital próprio, há R$0,63 de capital de terceiros (vs R$0,66 em 2023, equivalente a 65,5%) — menor dependência relativa de terceiros.', true],
+  ['ROE — Rentabilidade do Patrimônio Líquido', 'Lucro Líquido ÷ Patrimônio Líquido', fmtPct(roe24), fmtPct(roe23), 'ROE caiu 3,8 p.p. (18,7% → 14,9%). Efeito majoritário: normalização da alíquota efetiva de IR/CSLL, não deterioração operacional — ver aba DRE.', false],
+  ['Margem Líquida', 'Lucro Líquido ÷ Receita Operacional Líquida', fmtPct(margemLiq24), fmtPct(margemLiq23), 'Margem líquida de 16,6% (vs 18,8%) — compressão concentrada na linha de impostos sobre o lucro.', false],
+];
+document.querySelector('#tblIndic tbody').innerHTML = indicRows.map(r=>{
+  const badge = r[5] ? ' <span class="badge recalc">recalculado</span>' : '';
+  return `<tr><td>${r[0]}${badge}</td><td style="color:var(--muted);font-size:11.5px;">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td style="color:var(--muted);font-size:11.5px;max-width:280px;">${r[4]}</td></tr>`;
+}).join('');
+
+// ================= GRÁFICOS =================
+
+// DRE waterfall (2024) — R$ bi
 new Chart(document.getElementById('chartDRE'),{
   type:'bar',
   data:{
-    labels:['Receita Bruta','(-) CMV','Resultado Bruto','(-) Pessoal/Adm/Imp.','(+) Reembolsos','Res. Antes Financ.','(-) Dívida','(-) Retiradas','Resultado Final'],
+    labels:['ROL','(-) CPV','Lucro Bruto','(-) Desp. Operac. Líq.','EBIT','(-) Result. Financ. Líq.','LAIR','(-) IR/CSLL','Lucro Líquido'],
     datasets:[{
-      label:'Valor (R$)',
-      data:[54489.59,-14775.18,39714.41,-22702.48,4139.62,21150.95,-26314.35,-3061.19,-8224.59],
-      backgroundColor: ['#4fa3ff','#ff5d6c','#2dd4a0','#ff5d6c','#2dd4a0','#2dd4a0','#ff5d6c','#ff5d6c','#ff9f4a']
+      label:'R$ bi',
+      data:[89.452669,-43.615080,45.837589,-24.035931,21.801658,-2.314331,19.487327,-4.640375,14.846952],
+      backgroundColor:['#4fa3ff','#ff5d6c','#2dd4a0','#ff5d6c','#2dd4a0','#ff5d6c','#2dd4a0','#ff5d6c','#e8b84b']
     }]
   },
   options:{
     responsive:true,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)}}},
-    scales:{y:{ticks:{callback:v=>'R$ '+(v/1000)+'K'}},x:{ticks:{autoSkip:false,maxRotation:35,minRotation:35,font:{size:10}}}}
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}},
+    scales:{y:{ticks:{callback:v=>'R$ '+v+'bi'}},x:{ticks:{autoSkip:false,maxRotation:35,minRotation:35,font:{size:10}}}}
   }
 });
 
-// Composição donut (CMV, Pessoal, Financeiras, Outros, Resultado liquido)
-new Chart(document.getElementById('chartComposicao'),{
-  type:'doughnut',
-  data:{
-    labels:['CMV','Pessoal','Desp. Financeiras','Administrativo+Impostos+Terc.','Resultado do Exercício (déficit)'],
-    datasets:[{
-      data:[14775.18,13343.79,26314.35,9137.59,-8224.59].map(Math.abs),
-      backgroundColor:['#4fa3ff','#8b97a8','#ff5d6c','#ff9f4a','#2dd4a0']
-    }]
-  },
-  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:c=>c.label+': '+fmt(c.raw)}}}}
-});
-
-// Despesas ranking (horizontal bar)
-new Chart(document.getElementById('chartDespesasRank'),{
+// Evolução Receita/EBIT/Lucro (2023 x 2024)
+new Chart(document.getElementById('chartEvolucao'),{
   type:'bar',
   data:{
-    labels:['Despesas Financeiras','Compra Fornecedor/CMV','Pessoal','Administrativo','Impostos e Taxas','Serviços Terceirizados','Retirada de Sócios','Outros Operacionais'],
-    datasets:[{
-      label:'R$',
-      data:[26314.35,14775.18,13343.79,4245.25,2535.84,2356.50,3061.19,221.70],
-      backgroundColor:'#2dd4a0'
-    }]
+    labels:['Receita Líq. (ROL)','EBIT','Lucro Líquido'],
+    datasets:[
+      {label:'2023',data:[79.736856,18.831098,14.960459],backgroundColor:'#3a4452'},
+      {label:'2024',data:[89.452669,21.801658,14.846952],backgroundColor:'#e8b84b'}
+    ]
   },
-  options:{
-    indexAxis:'y',
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)}}},
-    scales:{x:{ticks:{callback:v=>'R$ '+(v/1000)+'K'}}}
-  }
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}},scales:{y:{ticks:{callback:v=>'R$ '+v+'bi'}}}}
 });
 
-// Custos detalhados (fixo, variável, dívida, sócios)
-const custoData = {
-  fixo:[
-    ['Salário','Custo Fixo',10006.96,18.4],['Internet','Custo Fixo',1416.10,2.6],['Honorários Financeiros','Custo Fixo',1400.00,2.6],
-    ['Informática','Custo Fixo',1093.43,2.0],['Pro-labore','Custo Fixo',618.20,1.1],['Tarifa Bancária','Custo Fixo',452.13,0.8],
-    ['Certificado Digital','Custo Fixo',183.00,0.3],['Seguro','Custo Fixo',178.82,0.3],['Associação','Custo Fixo',124.00,0.2],
-    ['Medicina no Trabalho','Custo Fixo',100.00,0.2],['Sindicato','Custo Fixo',44.00,0.1]
-  ],
-  varc:[
-    ['Compra Fornecedor','Custo Variável',14576.43,26.8],['Serviços Terceirizados','Custo Variável',2356.50,4.3],
-    ['Impostos','Custo Variável',2535.84,4.7],['Férias + Rescisão','Custo Variável',2718.63,5.0],
-    ['Material de Escritório','Custo Variável',296.89,0.5],['Multa','Custo Variável',229.49,0.4],
-    ['Cartão de Crédito','Custo Variável',118.19,0.2],['Compra de Insumos','Custo Variável',193.50,0.4],
-    ['Compra de Peças','Custo Variável',5.25,0.0]
-  ],
-  divida:[
-    ['Empréstimos','Serviço da Dívida',13268.74,24.4],['Financiamentos','Serviço da Dívida',11474.61,21.1]
-  ],
-  socios:[
-    ['Retirada de Sócios','Retirada de Sócios',3061.19,5.6]
-  ]
-};
-const allCustos = [...custoData.fixo,...custoData.varc,...custoData.divida,...custoData.socios];
-const badgeClass = {'Custo Fixo':'fixo','Custo Variável':'var','Serviço da Dívida':'div','Retirada de Sócios':'soc'};
-
-function renderCustoTable(rows,titulo){
-  document.getElementById('tblCustoTitulo').textContent = titulo;
-  const tbody = document.querySelector('#tblCusto tbody');
-  tbody.innerHTML = rows.map(r=>`<tr><td>${r[0]}</td><td><span class="badge ${badgeClass[r[1]]}">${r[1]}</span></td><td class="num">${fmt(r[2])}</td><td class="num">${fmtPct(r[3])}</td></tr>`).join('');
-}
-renderCustoTable(allCustos,'Detalhamento — Todas as Categorias');
-
-function clearCustoFilter(){
-  renderCustoTable(allCustos,'Detalhamento — Todas as Categorias');
-  document.getElementById('clearFilterCusto').style.display='none';
-}
-
-new Chart(document.getElementById('chartCustoDonut'),{
+// Composição do Ativo (2024)
+new Chart(document.getElementById('chartAtivoComp'),{
   type:'doughnut',
   data:{
-    labels:['Custo Fixo (28,7%)','Custo Variável (42,3%)','Serviço da Dívida (45,4%)','Retirada de Sócios (5,6%)'],
-    datasets:[{data:[15616.64,23030.72,24743.35,3061.19],backgroundColor:['#4fa3ff','#ff9f4a','#ff5d6c','#3a4452']}]
+    labels:['Ativo Circulante (33,3%)','Realizável a LP (12,9%)','Investimentos (0,2%)','Imobilizado (18,6%)','Intangível (7,7%)','Ágio (27,3%)'],
+    datasets:[{data:[54.155784,20.913198,0.395393,30.170194,12.530712,44.342668],backgroundColor:['#4fa3ff','#8b97a8','#3a4452','#ff9f4a','#2dd4a0','#e8b84b']}]
   },
-  options:{
-    onClick:(evt,elements)=>{
-      if(!elements.length) return;
-      const idx = elements[0].index;
-      const map = [['fixo','Custo Fixo'],['varc','Custo Variável'],['divida','Serviço da Dívida'],['socios','Retirada de Sócios']];
-      renderCustoTable(custoData[map[idx][0]], 'Detalhamento — ' + map[idx][1]);
-      document.getElementById('clearFilterCusto').style.display='inline-flex';
-    },
-    plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:c=>c.label+': '+fmt(c.raw)}}}
-  }
+  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10.5}}},tooltip:{callbacks:{label:c=>c.label.split(' (')[0]+': R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}}}
 });
 
-// Clientes donut
-new Chart(document.getElementById('chartClientes'),{
+// Estrutura de Capital
+new Chart(document.getElementById('chartCapital'),{
   type:'doughnut',
   data:{
-    labels:['Antecip./Cobr. Bancária (34,6%)','Outros 50+ clientes (43,7%)','Coop. de Crédito (6,6%)','Pref. Pouso Redondo (5,6%)','Royal Autocompany (5,5%)','Inova + F.C. Gráficos (4,0%)'],
-    datasets:[{data:[18862.95,23815.60,3600.00,3031.04,3000.00,2180.00],backgroundColor:['#4fa3ff','#2dd4a0','#ff9f4a','#ff5d6c','#8b97a8','#3a4452']}]
+    labels:['Patrimônio Líquido — Capital Próprio (61,3%)','Passivo Total — Capital de Terceiros (38,7%)'],
+    datasets:[{data:[99.580514,62.927435],backgroundColor:['#e8b84b','#3a4452']}]
   },
-  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}},tooltip:{callbacks:{label:c=>c.label+': '+fmt(c.raw)}}}}
+  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10.5}}},tooltip:{callbacks:{label:c=>c.label.split(' (')[0]+': R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}}}
 });
 
-// Caixa
-new Chart(document.getElementById('chartCaixa'),{
+// Ativo Circulante x Não Circulante (Balanço tab)
+new Chart(document.getElementById('chartAtivoDetalhe'),{
+  type:'doughnut',
+  data:{
+    labels:['Ativo Circulante (33,3%)','Ativo Não Circulante (66,7%)'],
+    datasets:[{data:[54.155784,108.352165],backgroundColor:['#4fa3ff','#3a4452']}]
+  },
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label.split(' (')[0]+': R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}}}
+});
+
+// Passivo + PL composição (Balanço tab)
+new Chart(document.getElementById('chartPassivoComp'),{
+  type:'doughnut',
+  data:{
+    labels:['Passivo Circulante (30,4%)','Passivo Não Circulante (8,3%)','Patrimônio Líquido (61,3%)'],
+    datasets:[{data:[49.388714,13.538721,99.580514],backgroundColor:['#ff5d6c','#ff9f4a','#e8b84b']}]
+  },
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label.split(' (')[0]+': R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}}}
+});
+
+// Margens (DRE tab)
+new Chart(document.getElementById('chartMargens'),{
   type:'bar',
   data:{
-    labels:['Entradas','Saídas','Resultado do Mês'],
-    datasets:[{data:[54489.59,-63315.00,-8825.41],backgroundColor:['#2dd4a0','#ff5d6c','#ff9f4a']}]
+    labels:['Margem Bruta','Margem EBIT','Margem Líquida'],
+    datasets:[
+      {label:'2023',data:[50.72,23.62,18.76],backgroundColor:'#3a4452'},
+      {label:'2024',data:[51.24,24.37,16.60],backgroundColor:'#e8b84b'}
+    ]
   },
-  options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)}}},scales:{y:{ticks:{callback:v=>'R$ '+(v/1000)+'K'}}}}
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%'}}},scales:{y:{ticks:{callback:v=>v+'%'}}}}
+});
+
+// Alíquota efetiva IR/CSLL
+new Chart(document.getElementById('chartAliquota'),{
+  type:'bar',
+  data:{
+    labels:['2023','2024'],
+    datasets:[{label:'Alíquota efetiva',data:[0.50,23.81],backgroundColor:['#2dd4a0','#ff9f4a']}]
+  },
+  options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%'}}},scales:{y:{ticks:{callback:v=>v+'%'}}}}
+});
+
+// Índices de Liquidez (Indicadores tab)
+new Chart(document.getElementById('chartLiquidez'),{
+  type:'bar',
+  data:{
+    labels:['Liquidez Corrente','Liquidez Seca','Liquidez Geral'],
+    datasets:[
+      {label:'2023',data:[0.8917,0.6571,1.0987],backgroundColor:'#3a4452'},
+      {label:'2024',data:[1.0965,0.8598,1.1929],backgroundColor:'#e8b84b'}
+    ]
+  },
+  options:{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}}}}
+});
+
+// Caixa líquido (Indicadores tab)
+new Chart(document.getElementById('chartCaixaLiquido'),{
+  type:'bar',
+  data:{
+    labels:['2023','2024'],
+    datasets:[
+      {label:'Dívida Bruta',data:[3.501066,3.452728],backgroundColor:'#ff5d6c'},
+      {label:'Caixa + Aplicações Financeiras',data:[16.578335,30.022121],backgroundColor:'#2dd4a0'},
+      {label:'Caixa Líquido',data:[13.077269,26.569393],backgroundColor:'#e8b84b'}
+    ]
+  },
+  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10.5}}},tooltip:{callbacks:{label:c=>c.dataset.label+': R$ '+c.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi'}}},scales:{y:{ticks:{callback:v=>'R$ '+v+'bi'}}}}
 });
 </script>
 </body>
